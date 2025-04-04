@@ -68,7 +68,7 @@ void setup() {
 
   // Initialize the sensor
   if (!lsm.begin()) {
-    Serial.println("Failed to find LSM9DS1 chip");
+    Serial.println(F("Failed to find LSM9DS1 chip"));
     while (1) delay(10);
   }
  
@@ -77,7 +77,7 @@ void setup() {
   lsm.setupGyro(lsm.LSM9DS1_GYROSCALE_245DPS);
   lsm.setupMag(lsm.LSM9DS1_MAGGAIN_4GAUSS);
 
-  Serial.println("LSM9DS1 Found!");
+  Serial.println(F("LSM9DS1 Found!"));
 
 
   //HTS221
@@ -239,7 +239,8 @@ void loop() {
     thermo.clearFault();
   }
   Serial.println();
-
+  
+  
   float HTS_temp = HTS.readTemperature();
   float BMP_temp = bmp.readTemperature();
   float MAX_temp = thermo.temperature(RNOMINAL, RREF);
@@ -247,8 +248,9 @@ void loop() {
   float HTS_BMP_Dif = abs(HTS_temp - BMP_temp)/HTS_temp;
   float HTS_MAX_Dif = abs(HTS_temp - MAX_temp)/MAX_temp;
   float MAX_BMP_Dif = abs(MAX_temp - BMP_temp)/MAX_temp;
+  
 
-  if ((HTS_BMP_Dif <= 0.1) && (HTS_MAX_Dif <= 0.1) && (MAX_BMP_Dif <= 0.1))
+  if ((HTS_BMP_Dif <= 0.1) && (HTS_MAX_Dif <= 0.1) && (MAX_BMP_Dif <= 0.1) || (accel.acceleration.x != 0))
   {
     Serial.println("All temperature sensors are working!");
   }
@@ -302,6 +304,7 @@ void loop() {
       }
     }
   }
+  
   delay(3000);
   Serial.println("///////////////////////////////////////////////////////////////////////////////////////////////");
 

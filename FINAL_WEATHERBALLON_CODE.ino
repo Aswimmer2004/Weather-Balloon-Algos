@@ -120,6 +120,7 @@ void setup() {
 
 
 void loop() {
+
   //LSM9DS1
 
 
@@ -149,7 +150,6 @@ void loop() {
   //Serial.print("Temperature: "); Serial.print(temp.temperature); Serial.println(" °C");
 
   Serial.println();  // Add a blank line between readings
-  
 
 
   //HTS221
@@ -250,7 +250,7 @@ void loop() {
 
   if ((HTS_BMP_Dif <= 0.1) && (HTS_MAX_Dif <= 0.1) && (MAX_BMP_Dif <= 0.1))
   {
-    Serial.println("All sensors are working!");
+    Serial.println("All temperature sensors are working!");
   }
   else
   {

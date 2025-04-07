@@ -86,7 +86,7 @@ void setup() {
     while (!Serial);
 
     if (!HTS.begin()) {
-      Serial.println("Failed to initialize humidity temperature sensor!");
+      Serial.println(F("Failed to initialize humidity temperature sensor!"));
       while (1);
   }
 
@@ -113,7 +113,7 @@ void setup() {
   //MAX31865
 
 
-  Serial.println("Adafruit MAX31865 PT100 Sensor Test!");
+  Serial.println(F("Adafruit MAX31865 PT100 Sensor Test!"));
 
   thermo.begin(MAX31865_3WIRE);
 }
@@ -130,21 +130,21 @@ void loop() {
   lsm.getEvent(&accel, &gyro, &mag, &temp);
 
   // Print accelerometer data
-  Serial.println(" ");
+  Serial.println(F(" "));
   Serial.println("LSM9DS1");
-  Serial.print("Accel X: "); Serial.print(accel.acceleration.x); Serial.print(" m/s^2 ");
-  Serial.print("Y: "); Serial.print(accel.acceleration.y); Serial.print(" m/s^2 ");
-  Serial.print("Z: "); Serial.print(accel.acceleration.z); Serial.println(" m/s^2");
+  Serial.print(F("Accel X: ")); Serial.print(accel.acceleration.x); Serial.print(F(" m/s^2 "));
+  Serial.print(F("Y: ")); Serial.print(accel.acceleration.y); Serial.print(F(" m/s^2 "));
+  Serial.print(F("Z: ")); Serial.print(accel.acceleration.z); Serial.println(F(" m/s^2"));
 
   // Print gyroscope data
-  Serial.print("Gyro X: "); Serial.print(gyro.gyro.x); Serial.print(" rad/s ");
-  Serial.print("Y: "); Serial.print(gyro.gyro.y); Serial.print(" rad/s ");
-  Serial.print("Z: "); Serial.print(gyro.gyro.z); Serial.println(" rad/s");
+  Serial.print(F("Gyro X: ")); Serial.print(gyro.gyro.x); Serial.print(F(" rad/s "));
+  Serial.print(F("Y: ")); Serial.print(gyro.gyro.y); Serial.print(F(" rad/s "));
+  Serial.print(F("Z: ")); Serial.print(gyro.gyro.z); Serial.println(F(" rad/s"));
 
   // Print magnetometer data
-  Serial.print("Mag X: "); Serial.print(mag.magnetic.x); Serial.print(" uT ");
-  Serial.print("Y: "); Serial.print(mag.magnetic.y); Serial.print(" uT ");
-  Serial.print("Z: "); Serial.print(mag.magnetic.z); Serial.println(" uT");
+  Serial.print(F("Mag X: ")); Serial.print(mag.magnetic.x); Serial.print(F(" uT "));
+  Serial.print(F("Y: ")); Serial.print(mag.magnetic.y); Serial.print(F(" uT "));
+  Serial.print(F("Z: ")); Serial.print(mag.magnetic.z); Serial.println(F(" uT"));
 
   // Print temperature data
   //Serial.print("Temperature: "); Serial.print(temp.temperature); Serial.println(" °C");
@@ -159,15 +159,15 @@ void loop() {
   float humidity    = HTS.readHumidity();
 
   // print each of the sensor values
-  Serial.println(" ");
-  Serial.println("HTS221");
-  Serial.print("Temperature = ");
+  Serial.println(F(" "));
+  Serial.println(F("HTS221"));
+  Serial.print(F("Temperature = "));
   Serial.print(temperature);
-  Serial.println(" °C");
+  Serial.println(F(" °C"));
 
-  Serial.print("Humidity    = ");
+  Serial.print(F("Humidity    = "));
   Serial.print(humidity);
-  Serial.println(" %");
+  Serial.println(F(" %"));
 
   // print an empty line
   Serial.println();
@@ -180,18 +180,18 @@ void loop() {
 
 
   
-  Serial.println("BMP280");
+  Serial.println(F("BMP280"));
   Serial.print(F("Temperature  = "));
   Serial.print(bmp.readTemperature());
-  Serial.println(" *C");
+  Serial.println(F(" *C"));
 
   Serial.print(F("Pressure = "));
   Serial.print(bmp.readPressure()/100);  //displaying the Pressure in hPa, you can change the unit
-  Serial.println("  hPa");
+  Serial.println(F("  hPa"));
 
   Serial.print(F("Approx altitude = "));
   Serial.print(bmp.readAltitude(1019.66));  //The "1019.66" is the pressure(hPa) at sea level in day in your region
-  Serial.println("  m");                    //If you don't know it, modify it until you get your current  altitude
+  Serial.println(F("  m"));                    //If you don't know it, modify it until you get your current  altitude
 
   Serial.println();
 
@@ -202,39 +202,39 @@ void loop() {
 
   uint16_t rtd = thermo.readRTD();
 
-  Serial.print("RTD value: "); Serial.println(rtd);
+  Serial.print(F("RTD value: ")); Serial.println(rtd);
   float ratio = rtd;
   ratio /= 32768;
-  Serial.println(" ");
-  Serial.println("MAX31865");
-  Serial.print("Ratio = "); Serial.println(ratio,8);
-  Serial.print("Resistance = "); Serial.println(RREF*ratio,8);
-  Serial.print("Temperature = "); Serial.println(thermo.temperature(RNOMINAL, RREF));
-  Serial.print(" ");
-  Serial.print(" ");
-  Serial.print(" ");
+  Serial.println(F(" "));
+  Serial.println(F("MAX31865"));
+  Serial.print(F("Ratio = ")); Serial.println(ratio,8);
+  Serial.print(F("Resistance = ")); Serial.println(RREF*ratio,8);
+  Serial.print(F("Temperature = ")); Serial.println(thermo.temperature(RNOMINAL, RREF));
+  Serial.print(F(" "));
+  Serial.print(F(" "));
+  Serial.print(F(" "));
 
   // Check and print any faults
   uint8_t fault = thermo.readFault();
   if (fault) {
-    Serial.print("Fault 0x"); Serial.println(fault, HEX);
+    Serial.print(F("Fault 0x")); Serial.println(fault, HEX);
     if (fault & MAX31865_FAULT_HIGHTHRESH) {
-      Serial.println("RTD High Threshold"); 
+      Serial.println(F("RTD High Threshold")); 
     }
     if (fault & MAX31865_FAULT_LOWTHRESH) {
-      Serial.println("RTD Low Threshold"); 
+      Serial.println(F("RTD Low Threshold")); 
     }
     if (fault & MAX31865_FAULT_REFINLOW) {
-      Serial.println("REFIN- > 0.85 x Bias"); 
+      Serial.println(F("REFIN- > 0.85 x Bias")); 
     }
     if (fault & MAX31865_FAULT_REFINHIGH) {
-      Serial.println("REFIN- < 0.85 x Bias - FORCE- open"); 
+      Serial.println(F("REFIN- < 0.85 x Bias - FORCE- open")); 
     }
     if (fault & MAX31865_FAULT_RTDINLOW) {
-      Serial.println("RTDIN- < 0.85 x Bias - FORCE- open"); 
+      Serial.println(F("RTDIN- < 0.85 x Bias - FORCE- open")); 
     }
     if (fault & MAX31865_FAULT_OVUV) {
-      Serial.println("Under/Over voltage"); 
+      Serial.println(F("Under/Over voltage")); 
     }
     thermo.clearFault();
   }
@@ -252,7 +252,7 @@ void loop() {
 
   if ((HTS_BMP_Dif <= 0.1) && (HTS_MAX_Dif <= 0.1) && (MAX_BMP_Dif <= 0.1) || (accel.acceleration.x != 0))
   {
-    Serial.println("All temperature sensors are working!");
+    Serial.println(F("All temperature sensors are working!"));
   }
   else
   {
@@ -260,15 +260,15 @@ void loop() {
     {
       if ((HTS_MAX_Dif > 0.1) && (MAX_BMP_Dif > 0.1))
       {
-        Serial.println("Likely Issue with MAX31865 Temperature Reading");
+        Serial.println(F("Likely Issue with MAX31865 Temperature Reading"));
       }
       else if (HTS_MAX_Dif > 0.1)
       {
-        Serial.println("Discrepency between MAX31865 and HTS221 Temperature Readings");
+        Serial.println(F("Discrepency between MAX31865 and HTS221 Temperature Readings"));
       }
       else if (MAX_BMP_Dif > 0.1)
       {
-        Serial.println("Discrepency between MAX31865 and BMP280 Temperature Readings");
+        Serial.println(F("Discrepency between MAX31865 and BMP280 Temperature Readings"));
       }
     }
 
@@ -276,15 +276,15 @@ void loop() {
     {
       if ((HTS_BMP_Dif > 0.1) && (MAX_BMP_Dif > 0.1))
       {
-        Serial.println("Likely Issue with BMP280 Temperature Reading");
+        Serial.println(F("Likely Issue with BMP280 Temperature Reading"));
       }
       else if (HTS_BMP_Dif > 0.1)
       {
-        Serial.println("Discrepency between BMP280 and HTS221 Temperature Readings");
+        Serial.println(F("Discrepency between BMP280 and HTS221 Temperature Readings"));
       }
       else if (MAX_BMP_Dif > 0.1)
       {
-        Serial.println("Discrepency between MAX31865 and BMP280 Temperature Readings");
+        Serial.println(F("Discrepency between MAX31865 and BMP280 Temperature Readings"));
       }
     }
 
@@ -292,15 +292,15 @@ void loop() {
     {
       if ((HTS_MAX_Dif > 0.1) && (HTS_BMP_Dif > 0.1))
       {
-        Serial.println("Likely Issue with HTS221 Temperature Reading");
+        Serial.println(F("Likely Issue with HTS221 Temperature Reading"));
       }
       else if (HTS_MAX_Dif > 0.1)
       {
-        Serial.println("Discrepency between MAX31865 and HTS221 Temperature Readings");
+        Serial.println(F("Discrepency between MAX31865 and HTS221 Temperature Readings"));
       }
       else if (HTS_BMP_Dif > 0.1)
       {
-        Serial.println("Discrepency between HTS221 and BMP280 Temperature Readings");
+        Serial.println(F("Discrepency between HTS221 and BMP280 Temperature Readings"));
       }
     }
   }

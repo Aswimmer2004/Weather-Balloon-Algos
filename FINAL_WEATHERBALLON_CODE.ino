@@ -1,16 +1,21 @@
+//GPS
+#include <Adafruit_GPS.h>
+#include <SoftwareSerial.h>
+
+SoftwareSerial mySerial(3, 2);
+Adafruit_GPS GPS(&mySerial);
+char c;
+
 //LSM9DS1
-
-
-
 #include <Arduino_LSM9DS1.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_LSM9DS1.h>
 
-#include <Arduino_HTS221.h>
-
+//HTS221
 #include <Arduino_HTS221.h>
 
 #include <Wire.h>
-#include <Adafruit_Sensor.h>
-#include <Adafruit_LSM9DS1.h>
+
 
 // Create an LSM9DS1 instance
 Adafruit_LSM9DS1 lsm = Adafruit_LSM9DS1();
@@ -19,30 +24,12 @@ Adafruit_LSM9DS1 lsm = Adafruit_LSM9DS1();
 #define LSM9DS1_XGCS 0x6A  // I2C address for the gyro & accel
 #define LSM9DS1_MCS 0x1C   // I2C address for the mag
 
-
-
-//HTS221
-
-
-
-#include <Arduino_HTS221.h>
-
-
-
 //BMP280
-
-
-
 #include  <Adafruit_BMP280.h>
 
 Adafruit_BMP280 bmp; // I2C Interface
 
-
-
 //MAX31865
-
-
-
 #include <Adafruit_MAX31865.h>
 
 // Use software SPI: CS, DI, DO, CLK
@@ -59,13 +46,15 @@ Adafruit_MAX31865 thermo = Adafruit_MAX31865(10, 11, 12, 13);
 
 
 void setup() {
-  //LSM9DS1
-
-
-
   Serial.begin(9600);
   while (!Serial) delay(10);  // Wait for the Serial Monitor
 
+  GPS.begin(9600);
+  GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
+  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);
+  delay(1000);
+
+  //LSM9DS1
   // Initialize the sensor
   if (!lsm.begin()) {
     Serial.println(F("Failed to find LSM9DS1 chip"));
@@ -79,21 +68,15 @@ void setup() {
 
   Serial.println(F("LSM9DS1 Found!"));
 
-
   //HTS221
+  while (!Serial);
 
-
-    while (!Serial);
-
-    if (!HTS.begin()) {
-      Serial.println(F("Failed to initialize humidity temperature sensor!"));
-      while (1);
+  if (!HTS.begin()) {
+    Serial.println(F("Failed to initialize humidity temperature sensor!"));
+    while (1);
   }
 
-
-
   //BMP280
-
   Serial.println(F("BMP280 test"));
 
   if  (!bmp.begin()) {
@@ -111,8 +94,6 @@ void setup() {
   
 
   //MAX31865
-
-
   Serial.println(F("Adafruit MAX31865 PT100 Sensor Test!"));
 
   thermo.begin(MAX31865_3WIRE);
@@ -121,9 +102,45 @@ void setup() {
 
 void loop() {
 
+  /*GPS
+    clearGPS();
+
+    while (!GPS.newNMEAreceived()) {
+      c = GPS.read();
+    }
+
+  */
+  //GPS.parse(GPS.lastNMEA());
+
+  Serial.print(F("Fix: "));
+  Serial.print(GPS.fix);
+  Serial.print(F(" quality: "));
+  Serial.println(GPS.fixquality);
+  Serial.print(F("Satellites: "));
+  Serial.println(GPS.satellites);
+
+  if (true) {
+    Serial.print(F("Location: "));
+    Serial.print(GPS.latitude);
+    Serial.print(GPS.lat);
+    Serial.print(F(", "));
+    Serial.print(GPS.longitude);
+    Serial.println(GPS.lon);
+    Serial.print(F("Google Maps location: "));
+    Serial.print(GPS.latitudeDegrees);
+    Serial.print(F(", "));
+    Serial.println(GPS.longitudeDegrees);
+
+    Serial.print(F("Speed (knots): "));
+    Serial.println(GPS.speed);
+    Serial.print(F("Heading: "));
+    Serial.println(GPS.angle);
+    Serial.print(F("Altitude: "));
+    Serial.println(GPS.altitude);
+  }
+  Serial.println(F("-------------------------------------"));
+
   //LSM9DS1
-
-
 
   // Get new sensor events
   sensors_event_t accel, gyro, mag, temp;
@@ -153,8 +170,6 @@ void loop() {
 
 
   //HTS221
-
-
   float temperature = HTS.readTemperature();
   float humidity    = HTS.readHumidity();
 
@@ -176,10 +191,6 @@ void loop() {
 
 
   //BMP280
-
-
-
-  
   Serial.println(F("BMP280"));
   Serial.print(F("Temperature  = "));
   Serial.print(bmp.readTemperature());
@@ -197,9 +208,6 @@ void loop() {
 
 
   //MAX31865
-
-
-
   uint16_t rtd = thermo.readRTD();
 
   Serial.print(F("RTD value: ")); Serial.println(rtd);
@@ -308,4 +316,16 @@ void loop() {
   delay(3000);
   Serial.println("///////////////////////////////////////////////////////////////////////////////////////////////");
 
+}
+
+void clearGPS() {
+  while (!GPS.newNMEAreceived()) {
+    c = GPS.read();
+  }
+  GPS.parse(GPS.lastNMEA());
+
+  while (!GPS.newNMEAreceived()) {
+    c = GPS.read();
+  }
+  GPS.parse(GPS.lastNMEA());
 }

@@ -102,15 +102,15 @@ void setup() {
 
 void loop() {
 
-  /*GPS
+  //GPS
     clearGPS();
 
     while (!GPS.newNMEAreceived()) {
       c = GPS.read();
     }
 
-  */
-  //GPS.parse(GPS.lastNMEA());
+  
+  GPS.parse(GPS.lastNMEA());
 
   Serial.print(F("Fix: "));
   Serial.print(GPS.fix);
@@ -248,7 +248,7 @@ void loop() {
   }
   Serial.println();
   
-  
+  //Failsafes in case temperature sensor fails
   float HTS_temp = HTS.readTemperature();
   float BMP_temp = bmp.readTemperature();
   float MAX_temp = thermo.temperature(RNOMINAL, RREF);

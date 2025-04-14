@@ -52,22 +52,22 @@ void loop() {
 
 if (1) {
     Serial.print(F("Location: "));
-    Serial.print(F(GPS.latitude, 4));
-    Serial.print(F(GPS.lat));
+    Serial.print(GPS.latitude, 4);
+    Serial.print(GPS.lat);
     Serial.print(F(", "));
-    Serial.print(F(GPS.longitude, 4));
-    Serial.println(F(GPS.lon));
+    Serial.print(GPS.longitude, 4);
+    Serial.println(GPS.lon);
     Serial.print(F("Google Maps location: "));
-    Serial.print(F(GPS.latitudeDegrees, 4));
+    Serial.print(GPS.latitudeDegrees, 4);
     Serial.print(F(", "));
-    Serial.println(F(GPS.longitudeDegrees, 4));
+    Serial.println(GPS.longitudeDegrees, 4);
 
     Serial.print(F("Speed (knots): "));
-    Serial.println(F(GPS.speed));
+    Serial.println(GPS.speed);
     Serial.print(F("Heading: "));
-    Serial.println(F(GPS.angle));
+    Serial.println(GPS.angle);
     Serial.print(F("Altitude: "));
-    Serial.println(F(GPS.altitude));
+    Serial.println(GPS.altitude);
   }
   Serial.println(F("-------------------------------------"));
 }

@@ -7,8 +7,8 @@ Adafruit_GPS GPS(&mySerial);
 char c;
 
 //LSM9DS1
-#include <Arduino_LSM9DS1.h>
-#include <Adafruit_Sensor.h>
+//#include <Arduino_LSM9DS1.h>
+//#include <Adafruit_Sensor.h>
 #include <Adafruit_LSM9DS1.h>
 
 //HTS221
@@ -31,6 +31,9 @@ Adafruit_BMP280 bmp; // I2C Interface
 
 //MAX31865
 #include <Adafruit_MAX31865.h>
+
+//SD Card
+//#include <SD.h>
 
 // Use software SPI: CS, DI, DO, CLK
 Adafruit_MAX31865 thermo = Adafruit_MAX31865(10, 11, 12, 13);
@@ -139,7 +142,6 @@ void loop() {
     Serial.println(GPS.altitude);
   }
   Serial.println(F("-------------------------------------"));
-
   //LSM9DS1
 
   // Get new sensor events
@@ -312,7 +314,7 @@ void loop() {
       }
     }
   }
-  
+
   delay(3000);
   Serial.println("///////////////////////////////////////////////////////////////////////////////////////////////");
 
